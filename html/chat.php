@@ -7,7 +7,7 @@
     <script src="../static/dist/js/bootstrap.min.js"></script>
     <script src="../static/dist/js/bootstrap.js"></script>
     <script src="../static/chat.js"></script>
-    <title>chart</title>
+    <title>chat</title>
 </head>
 <body>
 <div class="well">

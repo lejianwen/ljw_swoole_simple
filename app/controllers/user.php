@@ -35,7 +35,7 @@ class user extends base
         {
             $users[] = $redis->get($fd);
         }
-        require BASE_PATH.'/html/index.php';
+        require BASE_PATH.'/html/chat.php';
     }
 
     /*public function users($channel)
