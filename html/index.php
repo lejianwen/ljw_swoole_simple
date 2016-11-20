@@ -66,7 +66,7 @@
          var $btn = $(this).button('loading');
          var msg = $('#send_msg').val();
          chat.sendUserMessage(':all',msg);
-         $btn.button('reset');
+         //$btn.button('reset');
         });
         $('.change_ch').on('click',function () {
             var channel = $(this).attr('value');
@@ -108,8 +108,11 @@
             var arr = data.msg.split('#');
             if(arr[1] == '上线了' || arr[1] == '加入了该频道')
             {
-                if($('#'+arr[0])[0] == undefined)
+                if($('#'+arr[0])[0] == 'undefined')
+                {
                     $('#users').append('<h3 id="'+arr[0]+'">'+arr[0]+'</h3>');
+                }
+
             }
 
             else if(arr[1] == '下线了' || arr[1] == '离开了该频道')
