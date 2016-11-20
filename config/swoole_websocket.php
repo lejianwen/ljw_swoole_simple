@@ -7,8 +7,8 @@
  */
 return [
     'server' => [
-        'host' => '0.0.0.0',
+        'host' => '121.42.12.251',
         'port' => 9501
     ],
-    'store' => 'redis' //存储的方式  'redis' || 'mysql'
+    'store' => 'redis' //存储的方式  'redis' || 'mysql',暂时只有redis
 ];

@@ -54,8 +54,44 @@
 
     </div>
 </div>
+
 <script>
-    var chat = new chat('121.42.12.251','9501','<?php echo $user ? : '99999'?>','<?php echo $token?>','<?php echo $channel?>');
+    $(function(){
+        updateUserList();
+        $('#send_btn').on('click',function() {
+            var $btn = $(this).button('loading');
+            var msg = $('#send_msg').val();
+            chat.sendUserMessage(':all',msg);
+            $('#send_msg').val('');
+            $btn.button('reset');
+        });
+        //重新选择频道
+        $('.change_ch').on('click',function () {
+            var channel = 'swoole_channel_'+$(this).attr('value');
+            //清空聊天面板
+            $('#show_msg').html('');
+            //websocket 更换频道
+            chat.changeChannel(channel);
+            //清空频道users
+            users = {};
+            //web跟换频道，跟新session并拉取频道的用户
+            changeChannel(channel);
+        })
+    })
+</script>
+<script>
+    //用户列表数组
+    var users = {};
+    <?php if(!empty($users)): ?>
+    <?php foreach ($users as $user): ?>
+    users['<?php echo $user?>'] = '<?php echo $user?>';
+    <?php endforeach;?>
+    <?php endif;?>
+    //服务器ip
+    var server_host = '<?php echo $server['server']['host']?>';
+    //服务器端口
+    var server_port = '<?php echo $server['server']['port']?>';
+    var chat = new chat(server_host,server_port,'<?php echo $user ? : '99999'?>','<?php echo $token?>','<?php echo $channel?>');
     //改写展示消息
     chat.showMessage = function(data){
         if(data.type == TYPE_SYSTEM)
@@ -95,36 +131,8 @@
     };
 </script>
 <script>
-    $(function(){
-        updateUserList();
-        $('#send_btn').on('click',function() {
-         var $btn = $(this).button('loading');
-         var msg = $('#send_msg').val();
-         chat.sendUserMessage(':all',msg);
-         $('#send_msg').val('');
-         $btn.button('reset');
-        });
-        //重新选择频道
-        $('.change_ch').on('click',function () {
-            var channel = 'swoole_channel_'+$(this).attr('value');
-            //清空聊天面板
-            $('#show_msg').html('');
-            //websocket 更换频道
-            chat.changeChannel(channel);
-            //清空频道users
-            users = {};
-            //web跟换频道，跟新session并拉取频道的用户
-            changeChannel(channel);
-        })
-    })
-</script>
-<script>
-    var users = {};
-    <?php if(!empty($users)): ?>
-        <?php foreach ($users as $user): ?>
-            users['<?php echo $user?>'] = '<?php echo $user?>';
-        <?php endforeach;?>
-    <?php endif;?>
+
+    //web跟换频道,跟新session，获取频道用户列表
     function changeChannel(channel) {
         $.ajax({
             'url':'/changeChannel',
@@ -139,6 +147,7 @@
             }
         })
     }
+    //跟新频道用户列表
     function updateUserList() {
         $('#users').html('');
         $.each(users,function(k,v){
