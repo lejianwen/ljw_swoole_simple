@@ -8,9 +8,16 @@
 
 
 ## 
-* 登录验证没有判断，随便什么都可以，但用户名请不要使用纯数字
+* 登录验证没有判断，随便什么都可以，
+<br/>
+`登录方法在app\controllers\user.php  login_post中`
+<br/>
+`登录验证方法在 helpers\helper.php checkLogin中`
+* 用户名请不能使用纯数字
 * 频道的选择没有做全
 ## 使用
 * 请先在redis里面 添加一个频道集合 
-<pre class="brush:bash;">redis> zadd channels swoole_channel_1 swoole_channel_2 swoole_channel_3</pre>
+<pre class="brush:bash;">
+redis> zadd channels swoole_channel_1 swoole_channel_2 swoole_channel_3
+</pre>
 * 配置文件在config文件夹中
