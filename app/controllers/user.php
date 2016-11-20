@@ -18,7 +18,8 @@ class user extends base
         session_start();
         $_SESSION['user'] = $_POST['username'];
         $_SESSION['token'] = md5($_POST['password']);
-        header('Location:chat?channel=1');
+        $_SESSION['channel'] = $_POST['channel'];
+        header('Location:chat');
     }
 
     public function chat()
@@ -27,7 +28,7 @@ class user extends base
         $user = $_SESSION['user'] ;
         $token = $_SESSION['token'];
         $redis = require BASE_PATH.'/load/predis.php';
-        $channel = 'swoole_channel_'.$_GET['channel'];
+        $channel = $_SESSION['channel'];
         $fds = $redis->smembers($channel);
         $users = [];
         foreach ($fds as $fd)
