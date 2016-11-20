@@ -7,15 +7,14 @@
  */
 namespace store\Drivers;
 use store;
-
+use Predis;
 class redis implements store\IDriver
 {
-    public $redis;
+    public $redis ;
     //redis连接等都在外面实现
     public function __construct()
     {
         $this->redis = require BASE_PATH.'/load/predis.php';
-        $this->redis->select(2);
         return $this;
     }
 
@@ -25,22 +24,22 @@ class redis implements store\IDriver
         //设置string类型用户查找用户
         $this->redis->set($fd, $user);
         //hash用户查找fd
-        $this->redis->hMSet($user, ['fd' => $fd, 'channel' => $channel, 'time' => date('Y-m-d H:i:s')]);
+        $this->redis->hmset($user, ['fd' => $fd, 'channel' => $channel, 'time' => date('Y-m-d H:i:s')]);
         //fd存到集合中，用来广播
-        $this->redis->sAdd($channel, $fd);
+        $this->redis->sadd($channel, $fd);
     }
 
     //通过用户获取fd
     public function getFdByUser($user)
     {
-        $fd = $this->redis->hGet($user, 'fd');
+        $fd = $this->redis->hget($user, 'fd');
         return $fd ? : false;
     }
 
     //根据用户获取连接详细信息 ['fd' => '标识' , 'channel' => '频道']
     public function getUserDetail($user)
     {
-        $detail = $this->redis->hGetAll($user);
+        $detail = $this->redis->hgetall($user);
         return $detail ? : false;
     }
 
@@ -57,28 +56,28 @@ class redis implements store\IDriver
         if($this->redis->keys($fd))
         {
             $user = $this->getUserByFd($fd);
-            $channel = $this->redis->hGet($user, 'channel');
+            $channel = $this->redis->hget($user, 'channel');
             $this->redis->del($fd);
             $this->redis->del($user);
-            $this->redis->sRem($channel, $fd);
+            $this->redis->srem($channel, $fd);
         }
 
     }
 
     public function updateFdUser($old_fd, $fd, $user)
     {
-        $channel = $this->redis->hGet($user, 'channel');
+        $channel = $this->redis->hget($user, 'channel');
         $this->redis->del($old_fd);
-        $this->redis->sRem($channel, $old_fd);
+        $this->redis->srem($channel, $old_fd);
         //设置string类型用户查找用户
         $this->redis->set($fd, $user);
-        $this->redis->hMSet($user, ['fd' => $fd, 'channel' => $channel, 'time' => date('Y-m-d H:i:s')]);
-        $this->redis->sAdd($channel, $fd);
+        $this->redis->hmset($user, ['fd' => $fd, 'channel' => $channel, 'time' => date('Y-m-d H:i:s')]);
+        $this->redis->sadd($channel, $fd);
     }
 
     public function getChannelUsers($channel)
     {
-        $fds = $this->redis->sGetMembers($channel);
+        $fds = $this->redis->smembers($channel);
         $users = [];
         foreach ($fds as $fd)
             $users[] = $this->getUserByFd($fd);
@@ -87,12 +86,12 @@ class redis implements store\IDriver
 
     public function getChannelFds($channel)
     {
-        return $this->redis->sGetMembers($channel);
+        return $this->redis->smembers($channel);
     }
 
     public function getAllChannels()
     {
-        return $this->redis->sMembers('channels');
+        return $this->redis->smembers('channels');
     }
 
     public function getAllFds()
@@ -113,12 +112,12 @@ class redis implements store\IDriver
 
     public function getChannelByUser($user)
     {
-        return $this->redis->hGet($user, 'channel');
+        return $this->redis->hget($user, 'channel');
     }
 
     public function ChannelExists($channel)
     {
-        $channels = $this->redis->sMembers('channels');
+        $channels = $this->redis->smembers('channels');
         return in_array($channel, $channels) ? true : false;
     }
 
@@ -138,8 +137,8 @@ class redis implements store\IDriver
 
     public function _changeFdUserChannel($old_ch, $new_ch, $fd, $user)
     {
-        $this->redis->hMSet($user, ['fd' => $fd, 'channel' => $new_ch, 'time' => date('Y-m-d H:i:s')]);
-        $this->redis->sRem($old_ch, $fd);
-        $this->redis->sAdd($new_ch, $fd);
+        $this->redis->hmset($user, ['fd' => $fd, 'channel' => $new_ch, 'time' => date('Y-m-d H:i:s')]);
+        $this->redis->srem($old_ch, $fd);
+        $this->redis->sadd($new_ch, $fd);
     }
 }
