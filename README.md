@@ -20,5 +20,4 @@
 <pre class="brush:bash;">
 redis> zadd channels swoole_channel_1 swoole_channel_2 swoole_channel_3
 </pre>
-* 请在html/index.php中填写自己的server ip 跟port
 * 配置文件在config文件夹中
