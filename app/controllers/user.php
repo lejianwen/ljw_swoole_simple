@@ -27,21 +27,13 @@ class user extends base
         session_start();
         $user = $_SESSION['user'] ;
         $token = $_SESSION['token'];
-        $redis = require BASE_PATH.'/load/predis.php';
         $channel = $_SESSION['channel'];
-        $fds = $redis->smembers($channel);
-        $users = [];
-        foreach ($fds as $fd)
-        {
-            $users[] = $redis->get($fd);
-        }
         require BASE_PATH.'/html/index.php';
     }
 
     public function users($channel)
     {
         $redis = require BASE_PATH.'/load/predis.php';
-        $channel = 'swoole_channel_'.$channel;
         $fds = $redis->smembers($channel);
         $users = [];
         foreach ($fds as $fd)
@@ -49,5 +41,13 @@ class user extends base
             $users[] = $redis->get($fd);
         }
         exit(json_encode($users));
+    }
+
+    public function changeChannel()
+    {
+        session_start();
+        $_SESSION['channel'] = $_POST['channel'];
+        exit(json_encode(['code' => 0, 'msg' => 'success', 'channel' =>  $_POST['channel']]));
+
     }
 }

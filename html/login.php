@@ -17,6 +17,7 @@
         </div>
     </div>
     <div class="row clearfix">
+
         <div class="col-md-2 column">
         </div>
         <div class="col-md-6 column">
@@ -24,13 +25,13 @@
                 <div class="form-group">
                     <label for="username" class="col-md-2 control-label">用户名</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="username" name="username"/>
+                        <input required type="text" class="form-control" id="username" name="username"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="password" class="col-md-2 control-label">密码</label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control" id="password" name="password"/>
+                        <input required type="password" class="form-control" id="password" name="password"/>
                     </div>
                 </div>
                 <!--<div class="form-group">
@@ -40,6 +41,20 @@
                         </div>
                     </div>
                 </div>-->
+                <div class="form-group">
+                    <label class="col-md-2 control-label">请选择频道</label>
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary change_ch">
+                            <input required type="radio" name="channel"  value="swoole_channel_1" id="option1"> 频道 1
+                        </label>
+                        <label class="btn btn-primary change_ch">
+                            <input required type="radio" name="channel"  value="swoole_channel_2" id="option2"> 频道 2
+                        </label>
+                        <label class="btn btn-primary change_ch">
+                            <input required type="radio" name="channel" value="swoole_channel_3" id="option3"> 频道 3
+                        </label>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-default">登录</button>
