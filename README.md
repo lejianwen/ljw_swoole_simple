@@ -22,3 +22,4 @@
 redis> zadd channels swoole_channel_1 swoole_channel_2 swoole_channel_3
 </pre>
 * 配置文件在config文件夹中
+## QQ 84855512
