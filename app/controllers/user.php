@@ -28,6 +28,8 @@ class user extends base
         $user = $_SESSION['user'] ;
         $token = $_SESSION['token'];
         $channel = $_SESSION['channel'];
+        if(!$user || !$token || !$channel)
+            header('Location:login');
         $server = require BASE_PATH.'/config/swoole_websocket.php';
         $redis = require BASE_PATH.'/load/predis.php';
         $fds = $redis->smembers($channel);
