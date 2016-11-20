@@ -1,0 +1,22 @@
+{
+  "require": {
+    "predis/predis": "*",
+    "filp/whoops": "*",
+    "noahbuscher/macaw": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "store\\": "store/",
+      "helpers\\": "helpers/",
+      "app\\" : "app/"
+    },
+    "classmap": [
+    ]
+  },
+  "repositories": {
+    "packagist": {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
+    }
+  }
+}
