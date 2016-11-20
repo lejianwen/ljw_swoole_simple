@@ -16,6 +16,7 @@
 * 用户名不能使用纯数字
 * 频道的选择没有做全
 ## 使用
+* 默认是使用redis的2号数据库
 * 请先在redis里面 添加一个频道集合 
 <pre class="brush:bash;">
 redis> zadd channels swoole_channel_1 swoole_channel_2 swoole_channel_3
