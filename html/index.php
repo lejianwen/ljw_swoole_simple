@@ -71,12 +71,13 @@
             $('#show_msg').append($msg);
             var arr = data.msg.split('#');
             if(arr[1] == '上线了' || arr[1] == '加入了该频道'){
-                if($('#'+arr[0])[0] == 'undefined')
-                    $('#users').append('<h3 id="'+arr[0]+'">'+arr[0]+'</h3>');
+                users[arr[0]] = arr[0];
+                updateUserList();
             }
             else if(arr[1] == '下线了' || arr[1] == '离开了该频道')
             {
-                $('#'+arr[0]).remove();
+                users[arr[0]] = null;
+                updateUserList();
             }
 
         }else{
@@ -95,8 +96,7 @@
 </script>
 <script>
     $(function(){
-        //频道用户拉取用ajax
-        getChannelUsers('<?= $channel?>');
+        updateUserList();
         $('#send_btn').on('click',function() {
          var $btn = $(this).button('loading');
          var msg = $('#send_msg').val();
@@ -107,38 +107,44 @@
         //重新选择频道
         $('.change_ch').on('click',function () {
             var channel = 'swoole_channel_'+$(this).attr('value');
-            //websocket 更换频道
-            chat.changeChannel(channel);
-            //跟新session中的频道,刷新web的时候可以记住频道
-            $.ajax({
-                'url':'/changeChannel',
-                'data':{'channel':channel},
-                'type':'post',
-                'dataType':'json',
-                success:function (res) {}
-            });
-
             //清空聊天面板
             $('#show_msg').html('');
-            $('#users').html('');
-            //频道用户拉取用ajax
-            getChannelUsers(channel);
+            //websocket 更换频道
+            chat.changeChannel(channel);
+            //清空频道users
+            users = {};
+            //web跟换频道，跟新session并拉取频道的用户
+            changeChannel(channel);
         })
     })
 </script>
 <script>
-    function getChannelUsers(channel) {
+    var users = {};
+    <?php if(!empty($users)): ?>
+        <?php foreach ($users as $user): ?>
+            users['<?php echo $user?>'] = '<?php echo $user?>';
+        <?php endforeach;?>
+    <?php endif;?>
+    function changeChannel(channel) {
         $.ajax({
-            'url':'/users/'+channel,
-            'data':{},
+            'url':'/changeChannel',
+            'data':{'channel':channel},
             'dataType':'json',
-            'type':'get',
+            'type':'post',
             'success':function (re) {
-                $(re).each(function(k,v){
-                    $('#users').append('<h3 id="'+v+'">'+v+'</h3>');
+                $(re.users).each(function(k,v){
+                    users[v] = v;
                 });
+                updateUserList();
             }
         })
+    }
+    function updateUserList() {
+        $('#users').html('');
+        $.each(users,function(k,v){
+            if(v)
+                $('#users').append('<h3 id="'+v+'">'+v+'</h3>');
+        });
     }
 </script>
 </body>

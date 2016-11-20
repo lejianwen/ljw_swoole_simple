@@ -28,10 +28,17 @@ class user extends base
         $user = $_SESSION['user'] ;
         $token = $_SESSION['token'];
         $channel = $_SESSION['channel'];
+        $redis = require BASE_PATH.'/load/predis.php';
+        $fds = $redis->smembers($channel);
+        $users = [];
+        foreach ($fds as $fd)
+        {
+            $users[] = $redis->get($fd);
+        }
         require BASE_PATH.'/html/index.php';
     }
 
-    public function users($channel)
+    /*public function users($channel)
     {
         $redis = require BASE_PATH.'/load/predis.php';
         $fds = $redis->smembers($channel);
@@ -41,13 +48,26 @@ class user extends base
             $users[] = $redis->get($fd);
         }
         exit(json_encode($users));
-    }
+    }*/
 
     public function changeChannel()
     {
         session_start();
-        $_SESSION['channel'] = $_POST['channel'];
-        exit(json_encode(['code' => 0, 'msg' => 'success', 'channel' =>  $_POST['channel']]));
+        $channel = $_POST['channel'];
+        $_SESSION['channel'] = $channel;
+        $redis = require BASE_PATH.'/load/predis.php';
+        $fds = $redis->smembers($channel);
+        $users = [];
+        foreach ($fds as $fd)
+        {
+            $users[] = $redis->get($fd);
+        }
+        exit(json_encode([
+            'code' => 0,
+            'msg' => 'success',
+            'channel' => $channel,
+            'users' => $users
+        ]));
 
     }
 }
