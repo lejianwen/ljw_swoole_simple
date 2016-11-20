@@ -13,7 +13,7 @@
 `登录方法在app\controllers\user.php  login_post中`
 <br/>
 `登录验证方法在 helpers\helper.php checkLogin中`
-* 用户名请不能使用纯数字
+* 用户名不能使用纯数字
 * 频道的选择没有做全
 ## 使用
 * 请先在redis里面 添加一个频道集合 

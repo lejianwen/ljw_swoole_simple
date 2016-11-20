@@ -7,7 +7,7 @@
  */
 //predis的配置
 return [
-    'host' => '121.42.12.251',
-    'port' => 8080,
-    'password' => 'ljw.1989',
+    'host' => '127.0.0.1',
+    'port' => 6379,
+    'password' => '',
 ];
