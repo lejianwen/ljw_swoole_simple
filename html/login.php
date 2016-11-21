@@ -18,19 +18,17 @@
     </div>
     <div class="row clearfix">
 
-        <div class="col-md-2 column">
-        </div>
-        <div class="col-md-6 column">
+        <div class="col-md-10 column">
             <form class="form-horizontal" role="form" action="/login" method="post">
                 <div class="form-group">
-                    <label for="username" class="col-md-2 control-label">用户名</label>
-                    <div class="col-sm-10">
+                    <label for="username" class="col-sm-4 control-label">用户名</label>
+                    <div class="col-sm-6">
                         <input required type="text" class="form-control" id="username" name="username"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password" class="col-md-2 control-label">密码</label>
-                    <div class="col-sm-10">
+                    <label for="password" class="col-sm-4 control-label">密码</label>
+                    <div class="col-sm-6">
                         <input required type="password" class="form-control" id="password" name="password"/>
                     </div>
                 </div>
@@ -42,8 +40,8 @@
                     </div>
                 </div>-->
                 <div class="form-group">
-                    <label class="col-md-2 control-label">请选择频道</label>
-                    <div class="btn-group" data-toggle="buttons">
+                    <label class="col-sm-4 control-label">请选择频道</label>
+                    <div class="btn-group col-sm-6" data-toggle="buttons">
                         <label class="btn btn-primary change_ch">
                             <input required type="radio" name="channel"  value="swoole_channel_1" id="option1"> 频道 1
                         </label>
@@ -56,14 +54,12 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
+                    <div class="col-sm-offset-6 col-sm-10">
                         <button type="submit" class="btn btn-default">登录</button>
                         <button type="button" class="btn btn-default">注册</button>
                     </div>
                 </div>
             </form>
-        </div>
-        <div class="col-md-2 column">
         </div>
     </div>
 </div>
